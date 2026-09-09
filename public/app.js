@@ -1,31 +1,85 @@
 document.addEventListener('DOMContentLoaded', cargarAsientos);
 
-document.getElementById('asientoForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
+const form = document.getElementById('asientoForm');
+const btnGrabar = document.getElementById('btnGrabar');
+const btnModificar = document.getElementById('btnModificar');
+const btnBorrar = document.getElementById('btnBorrar');
+const btnLimpiar = document.getElementById('btnLimpiar');
 
-  const nuevoAsiento = {
+// Obtener datos del formulario
+function obtenerDatosFormulario() {
+  const monto = parseFloat(document.getElementById('monto').value) || 0;
+  const destino = document.getElementById('columna_destino').value;
+
+  return {
     glosa: document.getElementById('glosa').value,
     tipo_asiento: document.getElementById('tipo_asiento').value,
-    monto: parseFloat(document.getElementById('monto').value) || 0,
-    debe: parseFloat(document.getElementById('debe').value) || 0,
-    haber: parseFloat(document.getElementById('haber').value) || 0,
+    monto: monto,
+    debe: destino === 'Debe' ? monto : 0,
+    haber: destino === 'Haber' ? monto : 0,
     actividad: document.getElementById('actividad').value
   };
+}
 
-  const response = await fetch('/api/asientos', {
+// 1. GRABAR (POST)
+btnGrabar.addEventListener('click', async () => {
+  const datos = obtenerDatosFormulario();
+  if (!datos.glosa) return alert('Por favor ingresa una glosa');
+
+  const res = await fetch('/api/asientos', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(nuevoAsiento)
+    body: JSON.stringify(datos)
   });
 
-  if (response.ok) {
-    document.getElementById('asientoForm').reset();
+  if (res.ok) {
+    limpiar();
     cargarAsientos();
-  } else {
-    alert('Error al guardar en la base de datos');
   }
 });
 
+// 2. MODIFICAR (PUT)
+btnModificar.addEventListener('click', async () => {
+  const id = document.getElementById('id_asiento').value;
+  if (!id) return alert('Selecciona un asiento de la lista para modificar');
+
+  const datos = obtenerDatosFormulario();
+
+  const res = await fetch(`/api/asientos/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(datos)
+  });
+
+  if (res.ok) {
+    limpiar();
+    cargarAsientos();
+  }
+});
+
+// 3. BORRAR (DELETE)
+btnBorrar.addEventListener('click', async () => {
+  const id = document.getElementById('id_asiento').value;
+  if (!id) return alert('Selecciona un asiento de la lista para borrar');
+
+  if (confirm(`¿Estás seguro de eliminar el asiento #${id}?`)) {
+    const res = await fetch(`/api/asientos/${id}`, { method: 'DELETE' });
+    if (res.ok) {
+      limpiar();
+      cargarAsientos();
+    }
+  }
+});
+
+// LIMPIAR
+btnLimpiar.addEventListener('click', limpiar);
+
+function limpiar() {
+  document.getElementById('id_asiento').value = '';
+  form.reset();
+}
+
+// CARGAR ASIENTOS EN LA TABLA
 async function cargarAsientos() {
   const response = await fetch('/api/asientos');
   const asientos = await response.json();
@@ -34,16 +88,30 @@ async function cargarAsientos() {
   tabla.innerHTML = '';
 
   asientos.forEach(a => {
-    tabla.innerHTML += `
-      <tr>
-        <td>${a.id}</td>
-        <td>${a.glosa}</td>
-        <td>${a.tipo_asiento}</td>
-        <td>$ ${parseFloat(a.monto).toFixed(2)}</td>
-        <td>$ ${parseFloat(a.debe).toFixed(2)}</td>
-        <td>$ ${parseFloat(a.haber).toFixed(2)}</td>
-        <td>${a.actividad}</td>
-      </tr>
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${a.id}</td>
+      <td>${a.glosa}</td>
+      <td>${a.tipo_asiento}</td>
+      <td>$ ${parseFloat(a.monto).toFixed(2)}</td>
+      <td>$ ${parseFloat(a.debe).toFixed(2)}</td>
+      <td>$ ${parseFloat(a.haber).toFixed(2)}</td>
+      <td>${a.actividad}</td>
     `;
+
+    // Cargar datos al hacer clic en una fila
+    tr.addEventListener('click', () => {
+      document.getElementById('id_asiento').value = a.id;
+      document.getElementById('glosa').value = a.glosa;
+      document.getElementById('tipo_asiento').value = a.tipo_asiento;
+      document.getElementById('monto').value = a.monto;
+      document.getElementById('columna_destino').value = parseFloat(a.debe) > 0 ? 'Debe' : 'Haber';
+      document.getElementById('actividad').value = a.actividad;
+
+      document.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
+      tr.classList.add('selected');
+    });
+
+    tabla.appendChild(tr);
   });
 }
