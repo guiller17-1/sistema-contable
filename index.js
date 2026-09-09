@@ -13,6 +13,7 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
+// 1. OBTENER ASIENTOS
 app.get('/api/asientos', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM asientos ORDER BY id DESC');
@@ -22,6 +23,7 @@ app.get('/api/asientos', async (req, res) => {
   }
 });
 
+// 2. GRABAR
 app.post('/api/asientos', async (req, res) => {
   const { glosa, tipo_asiento, debe, haber, monto, actividad } = req.body;
   try {
@@ -31,6 +33,34 @@ app.post('/api/asientos', async (req, res) => {
       [glosa, tipo_asiento, debe || 0, haber || 0, monto || 0, actividad]
     );
     res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 3. MODIFICAR
+app.put('/api/asientos/:id', async (req, res) => {
+  const { id } = req.params;
+  const { glosa, tipo_asiento, debe, haber, monto, actividad } = req.body;
+  try {
+    const result = await pool.query(
+      `UPDATE asientos 
+       SET glosa = $1, tipo_asiento = $2, debe = $3, haber = $4, monto = $5, actividad = $6 
+       WHERE id = $7 RETURNING *`,
+      [glosa, tipo_asiento, debe || 0, haber || 0, monto || 0, actividad, id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 4. BORRAR
+app.delete('/api/asientos/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query('DELETE FROM asientos WHERE id = $1', [id]);
+    res.json({ message: 'Asiento eliminado' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
