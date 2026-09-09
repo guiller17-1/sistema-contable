@@ -6,12 +6,12 @@ const btnModificar = document.getElementById('btnModificar');
 const btnBorrar = document.getElementById('btnBorrar');
 const btnLimpiar = document.getElementById('btnLimpiar');
 
-// Obtener datos del formulario
 function obtenerDatosFormulario() {
   const monto = parseFloat(document.getElementById('monto').value) || 0;
   const destino = document.getElementById('columna_destino').value;
 
   return {
+    cuenta: document.getElementById('cuenta').value,
     glosa: document.getElementById('glosa').value,
     tipo_asiento: document.getElementById('tipo_asiento').value,
     monto: monto,
@@ -21,7 +21,7 @@ function obtenerDatosFormulario() {
   };
 }
 
-// 1. GRABAR (POST)
+// 1. GRABAR
 btnGrabar.addEventListener('click', async () => {
   const datos = obtenerDatosFormulario();
   if (!datos.glosa) return alert('Por favor ingresa una glosa');
@@ -38,7 +38,7 @@ btnGrabar.addEventListener('click', async () => {
   }
 });
 
-// 2. MODIFICAR (PUT)
+// 2. MODIFICAR
 btnModificar.addEventListener('click', async () => {
   const id = document.getElementById('id_asiento').value;
   if (!id) return alert('Selecciona un asiento de la lista para modificar');
@@ -57,7 +57,7 @@ btnModificar.addEventListener('click', async () => {
   }
 });
 
-// 3. BORRAR (DELETE)
+// 3. BORRAR
 btnBorrar.addEventListener('click', async () => {
   const id = document.getElementById('id_asiento').value;
   if (!id) return alert('Selecciona un asiento de la lista para borrar');
@@ -71,7 +71,6 @@ btnBorrar.addEventListener('click', async () => {
   }
 });
 
-// LIMPIAR
 btnLimpiar.addEventListener('click', limpiar);
 
 function limpiar() {
@@ -79,7 +78,6 @@ function limpiar() {
   form.reset();
 }
 
-// CARGAR ASIENTOS EN LA TABLA
 async function cargarAsientos() {
   const response = await fetch('/api/asientos');
   const asientos = await response.json();
@@ -91,6 +89,7 @@ async function cargarAsientos() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${a.id}</td>
+      <td><strong>${a.cuenta || '-'}</strong></td>
       <td>${a.glosa}</td>
       <td>${a.tipo_asiento}</td>
       <td>$ ${parseFloat(a.monto).toFixed(2)}</td>
@@ -99,9 +98,9 @@ async function cargarAsientos() {
       <td>${a.actividad}</td>
     `;
 
-    // Cargar datos al hacer clic en una fila
     tr.addEventListener('click', () => {
       document.getElementById('id_asiento').value = a.id;
+      document.getElementById('cuenta').value = a.cuenta || '10 - Caja y Bancos';
       document.getElementById('glosa').value = a.glosa;
       document.getElementById('tipo_asiento').value = a.tipo_asiento;
       document.getElementById('monto').value = a.monto;
