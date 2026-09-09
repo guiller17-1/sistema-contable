@@ -13,7 +13,7 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-// 1. OBTENER ASIENTOS
+// 1. OBTENER
 app.get('/api/asientos', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM asientos ORDER BY id DESC');
@@ -25,12 +25,12 @@ app.get('/api/asientos', async (req, res) => {
 
 // 2. GRABAR
 app.post('/api/asientos', async (req, res) => {
-  const { glosa, tipo_asiento, debe, haber, monto, actividad } = req.body;
+  const { cuenta, glosa, tipo_asiento, debe, haber, monto, actividad } = req.body;
   try {
     const result = await pool.query(
-      `INSERT INTO asientos (glosa, tipo_asiento, debe, haber, monto, actividad) 
-       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-      [glosa, tipo_asiento, debe || 0, haber || 0, monto || 0, actividad]
+      `INSERT INTO asientos (cuenta, glosa, tipo_asiento, debe, haber, monto, actividad) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+      [cuenta, glosa, tipo_asiento, debe || 0, haber || 0, monto || 0, actividad]
     );
     res.json(result.rows[0]);
   } catch (err) {
@@ -41,13 +41,13 @@ app.post('/api/asientos', async (req, res) => {
 // 3. MODIFICAR
 app.put('/api/asientos/:id', async (req, res) => {
   const { id } = req.params;
-  const { glosa, tipo_asiento, debe, haber, monto, actividad } = req.body;
+  const { cuenta, glosa, tipo_asiento, debe, haber, monto, actividad } = req.body;
   try {
     const result = await pool.query(
       `UPDATE asientos 
-       SET glosa = $1, tipo_asiento = $2, debe = $3, haber = $4, monto = $5, actividad = $6 
-       WHERE id = $7 RETURNING *`,
-      [glosa, tipo_asiento, debe || 0, haber || 0, monto || 0, actividad, id]
+       SET cuenta = $1, glosa = $2, tipo_asiento = $3, debe = $4, haber = $5, monto = $6, actividad = $7 
+       WHERE id = $8 RETURNING *`,
+      [cuenta, glosa, tipo_asiento, debe || 0, haber || 0, monto || 0, actividad, id]
     );
     res.json(result.rows[0]);
   } catch (err) {
