@@ -5,11 +5,11 @@
   <title>Módulo Contable</title>
   <style>
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #eef2f5; margin: 20px; }
-    .container { max-width: 950px; margin: 0 auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .container { max-width: 1000px; margin: 0 auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
     h2 { text-align: center; color: #1a252f; margin-bottom: 20px; }
     .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
     .form-group { display: flex; flex-direction: column; }
-    .form-group.full { grid-column: span 3; }
+    .form-group.span-2 { grid-column: span 2; }
     label { font-weight: 600; font-size: 13px; color: #495057; margin-bottom: 5px; }
     input, select { padding: 9px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; }
     .actions { display: flex; gap: 10px; margin-bottom: 25px; }
@@ -19,7 +19,7 @@
     .btn-delete { background-color: #dc3545; }
     .btn-clear { background-color: #6c757d; }
     table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { border: 1px solid #dee2e6; padding: 10px; text-align: center; font-size: 14px; }
+    th, td { border: 1px solid #dee2e6; padding: 10px; text-align: center; font-size: 13px; }
     th { background-color: #0d6efd; color: white; }
     tr:hover { background-color: #e9ecef; cursor: pointer; }
     .selected { background-color: #d1e7dd !important; }
@@ -32,13 +32,19 @@
   <h2>Registro de Asiento Contable</h2>
   
   <form id="asientoForm">
-    <!-- ID Oculto para Modificar / Borrar -->
     <input type="hidden" id="id_asiento">
 
     <div class="form-grid">
-      <div class="form-group full">
-        <label>Glosa / Descripción:</label>
-        <input type="text" id="glosa" placeholder="Ej: Se vendió mercadería según factura 001" required>
+      <!-- Arriba a la izquierda: Cuenta Contable -->
+      <div class="form-group">
+        <label>Cuenta Contable:</label>
+        <select id="cuenta">
+          <option value="10 - Caja y Bancos">10 - Caja y Bancos</option>
+          <option value="12 - Cuentas por Cobrar">12 - Cuentas por Cobrar</option>
+          <option value="40 - Impuestos / IGV / IVA">40 - Impuestos / IGV / IVA</option>
+          <option value="60 - Compras / Gastos">60 - Compras / Gastos</option>
+          <option value="70 - Ventas">70 - Ventas</option>
+        </select>
       </div>
 
       <div class="form-group">
@@ -60,12 +66,17 @@
         </select>
       </div>
 
+      <div class="form-group span-2">
+        <label>Glosa / Descripción:</label>
+        <input type="text" id="glosa" placeholder="Ej: Se vendió mercadería según factura 001" required>
+      </div>
+
       <div class="form-group">
         <label>Monto Total:</label>
         <input type="number" step="0.01" id="monto" value="0.00" required>
       </div>
 
-      <div class="form-group full">
+      <div class="form-group span-2">
         <label>Actividad:</label>
         <select id="actividad">
           <option value="Operativa">Operativa</option>
@@ -89,6 +100,7 @@
     <thead>
       <tr>
         <th>ID</th>
+        <th>Cuenta</th>
         <th>Glosa</th>
         <th>Tipo</th>
         <th>Monto</th>
