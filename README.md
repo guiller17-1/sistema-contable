@@ -1,35 +1,17 @@
-# Sistema Contable UNI V3 — Cloudflare
+# Sistema Contable UNI V4
 
-Versión demostrativa preparada para funcionar como sitio estático en Cloudflare, sin depender de un servidor Express.
+Versión estática autocontenida para Cloudflare. El CSS y JavaScript están dentro de `public/index.html` para evitar mezclar archivos de versiones anteriores.
 
-## Acceso de prueba
+## Acceso
 - Usuario: `admin`
 - Contraseña: `uni2026`
 
-## Incluye
-- Pantalla de login.
-- Panel general.
-- Asientos contables con alta, edición y eliminación.
-- Libro Diario y Libro Mayor.
-- Inventarios y balances.
-- Planillas.
-- Compras y ventas.
-- Balance General, Ganancias y Pérdidas, Flujo de Efectivo y Balance de Comprobación.
-- Costos, hoja de costos y costo de ventas.
-- Ajustes y cierre del ejercicio.
-- Tablas maestras.
-- Backup JSON.
-- Data referencial cargada al primer ingreso.
-
-## Cloudflare
-Si utilizas Wrangler:
-
-```bash
-npm install
-npm run deploy
-```
-
-Si utilizas Cloudflare Pages, publica la carpeta `public`.
-
 ## Importante
-Esta versión guarda la data de prueba en `localStorage` del navegador para que todo el sistema funcione inmediatamente en Cloudflare Pages/Assets. No es todavía una base compartida entre dispositivos. Para una versión productiva se recomienda conectar Cloudflare D1 o PostgreSQL y mover la autenticación al servidor.
+- La pantalla de login aparece siempre al cargar o recargar la web.
+- La data referencial se carga automáticamente con una clave nueva V4.
+- Los datos se guardan en `localStorage` del navegador.
+- Cada opción del menú muestra un módulo diferente.
+- Para desplegar con Wrangler: `npm install` y luego `npm run deploy`.
+- Para Cloudflare Pages, publica la carpeta `public`.
+
+Si reemplazas una versión anterior, elimina del repositorio los archivos viejos del frontend y sube el contenido de esta V4 completo.

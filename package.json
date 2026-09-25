@@ -1,12 +1,7 @@
 {
-  "name": "sistema-contable-uni-cloudflare",
-  "version": "3.0.0",
+  "name": "sistema-contable-uni-v4",
+  "version": "4.0.0",
   "private": true,
-  "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy"
-  },
-  "devDependencies": {
-    "wrangler": "^4.40.0"
-  }
+  "scripts": {"dev":"wrangler dev","deploy":"wrangler deploy"},
+  "devDependencies": {"wrangler":"^4.40.0"}
 }
