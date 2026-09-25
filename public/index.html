@@ -3,60 +3,88 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#8f1d2c">
   <title>Sistema Contable UNI</title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-<div class="app">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand-lockup">
-      <div class="brand-mark">UNI</div>
-      <div><div class="brand-title">Sistema Contable</div><div class="brand-sub">OMEGA SAC · Académico</div></div>
-    </div>
-
-    <div class="nav-group"><div class="nav-label">Inicio</div><button class="nav-item active" data-page="dashboard">Panel general</button></div>
-    <div class="nav-group"><div class="nav-label">Operaciones</div><button class="nav-item" data-page="asientos">Asientos contables</button></div>
-    <div class="nav-group"><div class="nav-label">Libros</div>
-      <button class="nav-item" data-report="diario" data-title="Libro Diario">Libro Diario</button>
-      <button class="nav-item" data-report="mayor" data-title="Libro Mayor">Libro Mayor</button>
-      <button class="nav-item" data-page="inventarios">Inventarios y balances</button>
-      <button class="nav-item" data-page="planillas">Planillas</button>
-      <button class="nav-item" data-page="compras">Compras</button>
-      <button class="nav-item" data-page="ventas">Ventas</button>
-    </div>
-    <div class="nav-group"><div class="nav-label">EEFF</div>
-      <button class="nav-item" data-report="balance-general" data-title="Balance General">Balance General</button>
-      <button class="nav-item" data-report="resultados" data-title="Ganancias y Pérdidas">Ganancias y Pérdidas</button>
-      <button class="nav-item" data-report="flujo-efectivo" data-title="Flujo de Efectivo">Flujo de Efectivo</button>
-      <button class="nav-item" data-report="balance-comprobacion" data-title="Balance de Comprobación">Balance de Comprobación</button>
-    </div>
-    <div class="nav-group"><div class="nav-label">Costos</div>
-      <button class="nav-item" data-page="costos">Libro mayor de fábrica</button>
-      <button class="nav-item" data-page="hoja-costos">Hoja de costos</button>
-      <button class="nav-item" data-page="costos">Costos fijos y variables</button>
-      <button class="nav-item" data-report="costo-ventas" data-title="Costo de Ventas">Costo de ventas</button>
-    </div>
-    <div class="nav-group"><div class="nav-label">Cierre</div>
-      <button class="nav-item" data-page="ajuste">Ajuste contable</button>
-      <button class="nav-item" data-page="cierre">Cierre del ejercicio</button>
-    </div>
-    <div class="nav-group"><div class="nav-label">Tablas</div><button class="nav-item" data-page="tablas">Tablas maestras</button></div>
-    <div class="nav-group"><div class="nav-label">Utilitarios</div>
-      <button class="nav-item" data-page="backup">Backup</button>
-      <button class="nav-item" data-page="estadisticas">Estadísticas</button>
-      <button class="nav-item" data-page="manual">Manual de usuario</button>
-    </div>
-    <div class="sidebar-footer">
-      <div class="user-mini"><strong id="userName">Usuario</strong><span id="userRole">—</span></div>
-      <button class="nav-item" id="btnLogout">Cerrar sesión</button>
-    </div>
-  </aside>
-
-  <main class="main">
-    <header class="topbar"><h1 id="pageTitle">Panel general</h1><div class="topbar-right"><span class="badge">Sistema Contable · UNI</span><button class="btn btn-secondary" id="btnMenu">☰</button></div></header>
-    <section class="content" id="content"></section>
+  <main class="login-page" id="loginView">
+    <section class="login-brand">
+      <div>
+        <div class="brand-lockup">
+          <div class="brand-mark">UNI</div>
+          <div><div class="brand-title">Sistema Contable</div><div class="brand-sub">OMEGA SAC · Proyecto académico</div></div>
+        </div>
+        <div style="margin-top:22px"><span class="demo-ribbon">Versión demostrativa Cloudflare</span></div>
+      </div>
+      <div class="login-message">
+        <h1>Información contable en un solo lugar.</h1>
+        <p>Registra operaciones, consulta libros, revisa estados financieros, controla costos y administra tablas maestras con una interfaz inspirada en la identidad visual de la UNI.</p>
+      </div>
+      <div style="position:relative;z-index:1;font-size:12px;opacity:.78">Universidad Nacional de Ingeniería · Sistema académico de demostración</div>
+    </section>
+    <section class="login-panel">
+      <form class="login-card" id="loginForm">
+        <h2>Iniciar sesión</h2>
+        <p>Ingresa tus credenciales para acceder al sistema.</p>
+        <div id="loginError" class="login-error hidden"></div>
+        <div class="field"><label>Usuario</label><input id="username" autocomplete="username" required placeholder="Usuario"></div>
+        <div class="field"><label>Contraseña</label><input id="password" type="password" autocomplete="current-password" required placeholder="Contraseña"></div>
+        <button class="btn btn-primary btn-block" type="submit">Ingresar al sistema</button>
+        <div class="demo-credentials"><b>Acceso de prueba</b><br>Usuario: <b>admin</b><br>Contraseña: <b>uni2026</b></div>
+      </form>
+    </section>
   </main>
-</div>
-<script src="/app.js"></script>
+
+  <div class="app hidden" id="appView">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-lockup">
+        <div class="brand-mark">UNI</div>
+        <div><div class="brand-title">Sistema Contable</div><div class="brand-sub">OMEGA SAC · Académico</div></div>
+      </div>
+      <div class="nav-group"><div class="nav-label">Inicio</div><button class="nav-item active" data-page="dashboard">Panel general</button></div>
+      <div class="nav-group"><div class="nav-label">Operaciones</div><button class="nav-item" data-page="asientos">Asientos contables</button></div>
+      <div class="nav-group"><div class="nav-label">Libros</div>
+        <button class="nav-item" data-report="diario" data-title="Libro Diario">Libro Diario</button>
+        <button class="nav-item" data-report="mayor" data-title="Libro Mayor">Libro Mayor</button>
+        <button class="nav-item" data-page="inventarios">Inventarios y balances</button>
+        <button class="nav-item" data-page="planillas">Planillas</button>
+        <button class="nav-item" data-page="compras">Compras</button>
+        <button class="nav-item" data-page="ventas">Ventas</button>
+      </div>
+      <div class="nav-group"><div class="nav-label">EEFF</div>
+        <button class="nav-item" data-report="balance-general" data-title="Balance General">Balance General</button>
+        <button class="nav-item" data-report="resultados" data-title="Ganancias y Pérdidas">Ganancias y Pérdidas</button>
+        <button class="nav-item" data-report="flujo-efectivo" data-title="Flujo de Efectivo">Flujo de Efectivo</button>
+        <button class="nav-item" data-report="balance-comprobacion" data-title="Balance de Comprobación">Balance de Comprobación</button>
+      </div>
+      <div class="nav-group"><div class="nav-label">Costos</div>
+        <button class="nav-item" data-page="costos">Libro mayor de fábrica</button>
+        <button class="nav-item" data-page="hoja-costos">Hoja de costos</button>
+        <button class="nav-item" data-page="costos">Costos fijos y variables</button>
+        <button class="nav-item" data-report="costo-ventas" data-title="Costo de Ventas">Costo de ventas</button>
+      </div>
+      <div class="nav-group"><div class="nav-label">Cierre</div>
+        <button class="nav-item" data-page="ajuste">Ajuste contable</button>
+        <button class="nav-item" data-page="cierre">Cierre del ejercicio</button>
+      </div>
+      <div class="nav-group"><div class="nav-label">Tablas</div><button class="nav-item" data-page="tablas">Tablas maestras</button></div>
+      <div class="nav-group"><div class="nav-label">Utilitarios</div>
+        <button class="nav-item" data-page="backup">Backup</button>
+        <button class="nav-item" data-page="estadisticas">Estadísticas</button>
+        <button class="nav-item" data-page="manual">Manual de usuario</button>
+      </div>
+      <div class="sidebar-footer">
+        <div class="user-mini"><strong id="userName">Usuario</strong><span id="userRole">—</span></div>
+        <button class="nav-item" id="btnLogout">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar"><h1 id="pageTitle">Panel general</h1><div class="topbar-right"><span class="badge">Sistema Contable · UNI</span><button class="btn btn-secondary" id="btnMenu">☰</button></div></header>
+      <section class="content" id="content"></section>
+    </main>
+  </div>
+<script src="./app.js"></script>
 </body>
 </html>
