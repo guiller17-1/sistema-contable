@@ -1,118 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Módulo Contable</title>
-  <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #eef2f5; margin: 20px; }
-    .container { max-width: 1000px; margin: 0 auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-    h2 { text-align: center; color: #1a252f; margin-bottom: 20px; }
-    .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
-    .form-group { display: flex; flex-direction: column; }
-    .form-group.span-2 { grid-column: span 2; }
-    label { font-weight: 600; font-size: 13px; color: #495057; margin-bottom: 5px; }
-    input, select { padding: 9px; border: 1px solid #ced4da; border-radius: 4px; font-size: 14px; }
-    .actions { display: flex; gap: 10px; margin-bottom: 25px; }
-    button { padding: 10px 24px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; color: white; }
-    .btn-save { background-color: #28a745; }
-    .btn-update { background-color: #ffc107; color: #333; }
-    .btn-delete { background-color: #dc3545; }
-    .btn-clear { background-color: #6c757d; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { border: 1px solid #dee2e6; padding: 10px; text-align: center; font-size: 13px; }
-    th { background-color: #0d6efd; color: white; }
-    tr:hover { background-color: #e9ecef; cursor: pointer; }
-    .selected { background-color: #d1e7dd !important; }
-    .tip { font-size: 12px; color: #6c757d; margin-top: 5px; text-align: center; }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sistema Contable UNI</title>
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-
-<div class="container">
-  <h2>Registro de Asiento Contable</h2>
-  
-  <form id="asientoForm">
-    <input type="hidden" id="id_asiento">
-
-    <div class="form-grid">
-      <!-- Arriba a la izquierda: Cuenta Contable -->
-      <div class="form-group">
-        <label>Cuenta Contable:</label>
-        <select id="cuenta">
-          <option value="10 - Caja y Bancos">10 - Caja y Bancos</option>
-          <option value="12 - Cuentas por Cobrar">12 - Cuentas por Cobrar</option>
-          <option value="40 - Impuestos / IGV / IVA">40 - Impuestos / IGV / IVA</option>
-          <option value="60 - Compras / Gastos">60 - Compras / Gastos</option>
-          <option value="70 - Ventas">70 - Ventas</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Tipo de Asiento:</label>
-        <select id="tipo_asiento">
-          <option value="Apertura">Apertura</option>
-          <option value="Operación">Operación</option>
-          <option value="Ajuste">Ajuste</option>
-          <option value="Reversión">Reversión</option>
-          <option value="Cierre">Cierre</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Columna Destino:</label>
-        <select id="columna_destino">
-          <option value="Debe">Debe</option>
-          <option value="Haber">Haber</option>
-        </select>
-      </div>
-
-      <div class="form-group span-2">
-        <label>Glosa / Descripción:</label>
-        <input type="text" id="glosa" placeholder="Ej: Se vendió mercadería según factura 001" required>
-      </div>
-
-      <div class="form-group">
-        <label>Monto Total:</label>
-        <input type="number" step="0.01" id="monto" value="0.00" required>
-      </div>
-
-      <div class="form-group span-2">
-        <label>Actividad:</label>
-        <select id="actividad">
-          <option value="Operativa">Operativa</option>
-          <option value="Inversión">Inversión</option>
-          <option value="Financiamiento">Financiamiento</option>
-        </select>
-      </div>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand-lockup">
+      <div class="brand-mark">UNI</div>
+      <div><div class="brand-title">Sistema Contable</div><div class="brand-sub">OMEGA SAC · Académico</div></div>
     </div>
 
-    <div class="actions">
-      <button type="button" id="btnGrabar" class="btn-save">Grabar</button>
-      <button type="button" id="btnModificar" class="btn-update">Modificar</button>
-      <button type="button" id="btnBorrar" class="btn-delete">Borrar</button>
-      <button type="button" id="btnLimpiar" class="btn-clear">Limpiar Formulario</button>
+    <div class="nav-group"><div class="nav-label">Inicio</div><button class="nav-item active" data-page="dashboard">Panel general</button></div>
+    <div class="nav-group"><div class="nav-label">Operaciones</div><button class="nav-item" data-page="asientos">Asientos contables</button></div>
+    <div class="nav-group"><div class="nav-label">Libros</div>
+      <button class="nav-item" data-report="diario" data-title="Libro Diario">Libro Diario</button>
+      <button class="nav-item" data-report="mayor" data-title="Libro Mayor">Libro Mayor</button>
+      <button class="nav-item" data-page="inventarios">Inventarios y balances</button>
+      <button class="nav-item" data-page="planillas">Planillas</button>
+      <button class="nav-item" data-page="compras">Compras</button>
+      <button class="nav-item" data-page="ventas">Ventas</button>
     </div>
-  </form>
+    <div class="nav-group"><div class="nav-label">EEFF</div>
+      <button class="nav-item" data-report="balance-general" data-title="Balance General">Balance General</button>
+      <button class="nav-item" data-report="resultados" data-title="Ganancias y Pérdidas">Ganancias y Pérdidas</button>
+      <button class="nav-item" data-report="flujo-efectivo" data-title="Flujo de Efectivo">Flujo de Efectivo</button>
+      <button class="nav-item" data-report="balance-comprobacion" data-title="Balance de Comprobación">Balance de Comprobación</button>
+    </div>
+    <div class="nav-group"><div class="nav-label">Costos</div>
+      <button class="nav-item" data-page="costos">Libro mayor de fábrica</button>
+      <button class="nav-item" data-page="hoja-costos">Hoja de costos</button>
+      <button class="nav-item" data-page="costos">Costos fijos y variables</button>
+      <button class="nav-item" data-report="costo-ventas" data-title="Costo de Ventas">Costo de ventas</button>
+    </div>
+    <div class="nav-group"><div class="nav-label">Cierre</div>
+      <button class="nav-item" data-page="ajuste">Ajuste contable</button>
+      <button class="nav-item" data-page="cierre">Cierre del ejercicio</button>
+    </div>
+    <div class="nav-group"><div class="nav-label">Tablas</div><button class="nav-item" data-page="tablas">Tablas maestras</button></div>
+    <div class="nav-group"><div class="nav-label">Utilitarios</div>
+      <button class="nav-item" data-page="backup">Backup</button>
+      <button class="nav-item" data-page="estadisticas">Estadísticas</button>
+      <button class="nav-item" data-page="manual">Manual de usuario</button>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-mini"><strong id="userName">Usuario</strong><span id="userRole">—</span></div>
+      <button class="nav-item" id="btnLogout">Cerrar sesión</button>
+    </div>
+  </aside>
 
-  <h3>Historial de Asientos</h3>
-  <p class="tip">💡 *Haz clic en cualquier fila de la lista para cargarla en el formulario y poder Modificarla o Borrarla.*</p>
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Cuenta</th>
-        <th>Glosa</th>
-        <th>Tipo</th>
-        <th>Monto</th>
-        <th>Debe</th>
-        <th>Haber</th>
-        <th>Actividad</th>
-      </tr>
-    </thead>
-    <tbody id="tablaAsientos"></tbody>
-  </table>
+  <main class="main">
+    <header class="topbar"><h1 id="pageTitle">Panel general</h1><div class="topbar-right"><span class="badge">Sistema Contable · UNI</span><button class="btn btn-secondary" id="btnMenu">☰</button></div></header>
+    <section class="content" id="content"></section>
+  </main>
 </div>
-
-<script src="app.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>
